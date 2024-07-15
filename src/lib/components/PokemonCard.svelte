@@ -1,11 +1,21 @@
 <script lang="ts">
-	import type { Pokemon } from '$lib/models/Pokemon';
+	import { goto } from '$app/navigation';
+	import type { PartialPokemon } from '$lib/models/Pokemon';
+	import { handleError } from '$lib/utils/image-not-found';
 	import { fly } from 'svelte/transition';
 
-	export let pokemon: Pokemon;
+	export let pokemon: PartialPokemon;
+
+	const goToPokemonDetails = (pokemonId: string) => {
+		goto(`/pokemon/${pokemonId}`);
+	};
 </script>
 
-<div class="w-36 relative group" in:fly={{ x: 10, delay: 50 }}>
+<button
+	class="w-36 relative group"
+	in:fly={{ x: 10, delay: 50 }}
+	on:click={() => goToPokemonDetails(pokemon.id)}
+>
 	<div class="flex flex-col items-center cardBackground">
 		<!-- Pokemon Name-->
 		<div class="w-full text-center items-center">
@@ -22,10 +32,11 @@
 				class="group-hover:-translate-y-0.5 group-hover:scale-150 group-hover:rotate-3 duration-300"
 				src={pokemon.spriteNormalUrl}
 				alt="pokemon pic"
+				on:error={handleError}
 			/>
 		</div>
 	</div>
-</div>
+</button>
 
 <style>
 	.pokemonName {

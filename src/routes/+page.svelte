@@ -1,19 +1,19 @@
 <script lang="ts">
 	import PokemonCard from '$lib/components/PokemonCard.svelte';
-	import type { Pokemon } from '$lib/models/Pokemon';
-	import type { KeyboardEventHandler } from 'svelte/elements';
+	import type { PartialPokemon } from '$lib/models/Pokemon';
 	import { fade } from 'svelte/transition';
+	import type { PageData } from './$types';
 
-	export let data: any;
-	let filteredPokemons: Pokemon[] = data.pokemons;
+	export let data: PageData;
+	let filteredPokemons: PartialPokemon[] = data.pokemons;
 
-	const handleSearchFor = (e: any) => {
-		const searchText = e.target.value;
+	const handleSearchFor = (e: Event) => {
+		const searchText = (e.target as HTMLInputElement).value;
 
 		if (!data) return;
 
 		if (searchText.length > 0) {
-			filteredPokemons = data.pokemons.filter((pokemon: Pokemon) => {
+			filteredPokemons = data.pokemons.filter((pokemon: PartialPokemon) => {
 				return pokemon.name.toLowerCase().includes(searchText.toLowerCase());
 			});
 		} else {
@@ -27,12 +27,11 @@
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
-<div class="p-5">
-	<div class="w-full h-14 mb-5 px-7 border rounded-full flex items-center">
-		<!-- <span class="h-6 w-6 text-gray-600 mr-4"><GiMagnifyingGlass /></span> -->
+<div class="flex flex-col gap-6">
+	<div class="w-3/5 h-14 flex m-auto items-center">
 		<input
 			type="text"
-			class="w-full h-full outline-none"
+			class="w-full h-full outline-none rounded-full drop-shadow-md text-center"
 			placeholder="Search a pokemon..."
 			on:keyup={handleSearchFor}
 		/>
